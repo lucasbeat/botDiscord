@@ -1,24 +1,95 @@
 const Discord = require('discord.js')
-const token = 'NjUyODU5NTI4MTgxNzEwODU4.XeulCQ.taFz5ihpSQoAcCFOF-0AW03yy1k'
+const token = 'NjUyODU5NTI4MTgxNzEwODU4.Xeuu3g.hivR1edb8ta3pQnG3edXW2BGpTg'
+const prefix = '/'
+const ytdl = require('ytdl-core')
+const bot = new Discord.Client()
 
-const client = new Discord.Client()
+//variavel aonde fica a queue 
+var servers = {}
 
-client.on('message', (msg) => {
+//mensagem simples 
+bot.on('message', (msg) => {
     if (msg.content === '!teste') {
-        msg.channel.send(`eae guei ${msg.author}`)
+        msg.channel.send(`eae ${msg.author}`)
     }
-    if (msg.content === '!crack') {
-        msg.channel.send(`eu fumo crack`)
-    }
-    if (msg.content === '-eae') {
-        msg.channel.send(`eae guei ${msg.author}`)
-    }
+
 })
 
-client.on('ready', () => {
+//funcao play para tocar musica do bot
+bot.on('message', message => {
+    let args = message.content.substring(prefix.length).split(" ")
+
+    switch (args[0]) {
+        case 'play':
+            //funcao main do bot
+            function play(connection, message) {
+                var server = servers[message.guild.id]
+
+                server.dispatcher = connection.playStream(ytdl(server.queue[0], { filter: 'audioonly' }))
+                server.queue.shift()
+                server.dispatcher.on('end', () => {
+                    if (server.queue[0]) {
+                        play(connection.message)
+                    } else {
+                        connection.disconnect()
+                    }
+                })
+            }
+
+
+            if (!args[1]) {
+                message.channel.send('tem que digitar a url certa, guei')
+                return
+            }
+            if (!message.member.voiceChannel) {
+                message.channel.send('precisa ta em uma sala de voz pra tocar, guei')
+            }
+
+            if (!servers[message.guild.id]) servers[message.guild.id] = {
+                queue: []
+            }
+
+            var server = servers[message.guild.id]
+
+            server.queue.push((args[1]))
+
+            if (!message.guild.voiceConnection) message.member.voiceChannel.join().then(function (connection) {
+                play(connection, message)
+            })
+
+
+            break;
+
+        case 'skip':
+            var server = servers[message.guild.id]
+            if (server.dispatcher) server.dispatcher.end()
+            message.channel.send('pulando a musica')
+            break
+
+        case 'stop':
+            var server = servers[message.guild.id]
+            if (message.guild.connection) {
+                for (var i = server.queue.length - 1; i >= 0; i--) {
+                    server.queue.splice(i, 1)
+                }
+
+                server.dispatcher.end()
+                message.channel.send('queue acabou, vou sair do canal de voz')
+                console.log('para a queue')
+
+            }
+            if (message.guild.connection) message.guild.voiceConnection.disconnect()
+
+            break
+    }
+
+})
+
+
+bot.on('ready', () => {
     console.log('bot esta funcionando')
 
     //client.channels.find(x => x.name === 'geral').send('sim')
 })
 
-client.login(token)
+bot.login(token)
