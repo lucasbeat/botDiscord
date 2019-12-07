@@ -1,18 +1,26 @@
 const Discord = require('discord.js')
-const token = 'NjUyODU5NTI4MTgxNzEwODU4.Xeuu3g.hivR1edb8ta3pQnG3edXW2BGpTg'
+const token = 'NjUyODU5NTI4MTgxNzEwODU4.XevMxA.VCGYsx_mPctIFSyTi-pBGISF_Xw'
 const prefix = '/'
 const ytdl = require('ytdl-core')
 const bot = new Discord.Client()
+
+var version = '1.0'
 
 //variavel aonde fica a queue 
 var servers = {}
 
 //mensagem simples 
 bot.on('message', (msg) => {
-    if (msg.content === '!teste') {
+    if (msg.content === `${prefix}teste`) {
         msg.channel.send(`eae ${msg.author}`)
     }
 
+})
+
+bot.on('message', (msg) => {
+    if (msg.content === `${prefix}info`) {
+        msg.channel.send('bot rodando na versao 1.0')
+    }
 })
 
 //funcao play para tocar musica do bot
@@ -87,7 +95,7 @@ bot.on('message', message => {
 
 
 bot.on('ready', () => {
-    console.log('bot esta funcionando')
+    console.log(`bot funcionando na versao ${version}`)
 
     //client.channels.find(x => x.name === 'geral').send('sim')
 })
