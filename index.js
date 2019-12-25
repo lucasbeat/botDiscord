@@ -1,7 +1,7 @@
 //variaveis
 const Discord = require('discord.js')
 const bot = new Discord.Client()
-const { GOOGLE_KEY, DISCORD_TOKENS } = require('./src/config')
+const { GOOGLE_KEY, DISCORD_TOKENS } = require('./config')
 const prefix = '/'
 const ytdl = require('ytdl-core')
 const Youtube = require('simple-youtube-api')

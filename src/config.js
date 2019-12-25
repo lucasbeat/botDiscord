@@ -1,4 +1,0 @@
-
-exports.DISCORD_TOKENS = 'NjUyODU5NTI4MTgxNzEwODU4.Xe2NiQ.k4uajW7oiXOzx-_dEolKU6fngyE'
-
-exports.GOOGLE_KEY = '1025840857687'
