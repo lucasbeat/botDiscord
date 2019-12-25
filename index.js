@@ -9,6 +9,8 @@ const youtube = new Youtube(GOOGLE_KEY)
 let pronto = false
 var version = '1.0'
 ////////////////////////////////////////
+
+
 bot.on('message', (msg) => {
     if (msg.content === `${prefix}entre`) {
 
@@ -38,6 +40,22 @@ bot.on('message', (msg) => {
     }
 })
 
+bot.on('message', (msg) => {
+    if (msg.content === `${prefix}eae`) {
+        msg.reply('eae')
+    }
+})
+bot.on('message', (msg) => {
+    if (msg.content === `${prefix}oi`) {
+        msg.reply('oi')
+    }
+})
+
+bot.on('message', (msg) => {
+    if (msg.content === `${prefix}tranquilo?`) {
+        msg.reply('to nao guei, vai tomar no cu')
+    }
+})
 
 //incia o bot
 bot.on('ready', () => {
@@ -45,5 +63,5 @@ bot.on('ready', () => {
 
     //client.channels.find(x => x.name === 'geral').send('sim')
 })
-
+//token
 bot.login(DISCORD_TOKENS)
