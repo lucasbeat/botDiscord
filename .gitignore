@@ -1,4 +1,4 @@
 node_modules
 config.js
-src
-
+src/config
+src/userInfo.js

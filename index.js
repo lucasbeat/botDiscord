@@ -1,70 +1,23 @@
-//variaveis
 const Discord = require('discord.js')
 const bot = new Discord.Client({ disableEveryone: true })
-const { GOOGLE_KEY, DISCORD_TOKENS } = require('./config')
-const prefix = '/'
-const ytdl = require('ytdl-core')
-const Youtube = require('simple-youtube-api')
-const youtube = new Youtube(GOOGLE_KEY)
+const botMsg = require('./src/commands/messages')
+const { PREFIX, DISCORD_TOKENS } = require('./src/config/config')
+const playMsu = require('./src/commands/play')
 const cheerio = require('cheerio')
 const request = require('request')
-const moment = require('moment')
 require('moment-duration-format')
-let pronto = false
-var version = '1.0'
 ////////////////////////////////////////
 
 
-bot.on('message', (msg) => {
-    if (msg.content === `${prefix}entre`) {
-
-        if (msg.member.voiceChannel) {
-            msg.member.voiceChannel.join();
-            pronto = true
-        } else {
-            msg.channel.send('precisa estar conectado ao canal de voz')
-        }
-    } else if (msg.content === `${prefix}saia`) {
-        if (msg.member.voiceChannel) {
-            msg.member.voiceChannel.leave()
-            pronto = false
-        } else {
-            msg.channel.send('precisa estar conectado ao canal de voz')
-        }
-
-    } else if (msg.content.startsWith(`${prefix}play`)) {
-        if (pronto) {
-            let oTocar = msg.content.replace(`${prefix}play`, '')
-            if (ytdl.validateURL(oTocar)) {
-                msg.member.voiceChannel.connection.playStream(ytdl(oTocar))
-            } else {
-                msg.channel.send('link invalido')
-            }
-        }
-    }
-})
-
+/////// TOCAR MUSICA /////
+bot.on('message', playMsu)
 
 /////// MENSAGENS ///////
-bot.on('message', (msg) => {
-    if (msg.content === `${prefix}eae`) {
-        msg.reply('eae')
-    }
-})
-bot.on('message', (msg) => {
-    if (msg.content === `${prefix}oi`) {
-        msg.reply('oi')
-    }
-})
+bot.on('message', botMsg)
 
+////// BUSCAR IMAGENS /////
 bot.on('message', (msg) => {
-    if (msg.content === `${prefix}tranquilo?`) {
-        msg.reply('tudo bem, e vc?')
-    }
-})
-///////////////
-bot.on('message', (msg) => {
-    let args = msg.content.substring(prefix.length).split(" ")
+    let args = msg.content.substring(PREFIX.length).split(" ")
 
     switch (args[0]) {
         case 'fofo':
@@ -101,6 +54,8 @@ function imagem(msg) {
 
 //incia o bot
 bot.on('ready', () => {
+    var version = '1.0'
+
     console.log(`bot funcionando na versao ${version}`)
 
     //client.channels.find(x => x.name === 'geral').send('sim')
